@@ -26,3 +26,7 @@
 *.exe
 *.out
 *.app
+
+enet-1.3.13
+enet_client/enet_client
+enet_server/enet_server
