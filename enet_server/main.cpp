@@ -10,27 +10,40 @@
 
 #include <iostream>
 #include <string>
+#include <enet/enet.h>
+
+#include "enet_server.h"
 
 int main(int argc, char* argv[])
 {
-  try
-  {
-    // Check command line arguments.
-    if (argc != 3)
+    try
     {
-      std::cerr << "Usage: enet_server <address> <port>\n";
-      std::cerr << "  For IPv4, try:\n";
-      std::cerr << "    battle_server 0.0.0.0 80\n";
-      std::cerr << "  For IPv6, try:\n";
-      std::cerr << "    battle_server 0::0 80\n";
-      return 1;
+        // Check command line arguments.
+        if (argc != 3)
+        {
+            std::cerr << "Usage: enet_server <address> <port>\n";
+            std::cerr << "  For IPv4, try:\n";
+            std::cerr << "    enet_server 0.0.0.0 80\n";
+            std::cerr << "  For IPv6, try:\n";
+            std::cerr << "    enet_server 0::0 80\n";
+            return 1;
+        }
+
+    }
+    catch (std::exception& e)
+    {
+        std::cerr << "exception: " << e.what() << "\n";
     }
 
-  }
-  catch (std::exception& e)
-  {
-    std::cerr << "exception: " << e.what() << "\n";
-  }
+    if (enet_initialize () != 0)
+    {
+        fprintf (stderr, "An error occurred while initializing ENet.\n");
+        return EXIT_FAILURE;
+    }
+    atexit (enet_deinitialize);
 
-  return 0;
+    std::shared_ptr<EnetServer> server_ptr = std::make_shared<EnetServer>(argv[1], std::atoi(argv[2]));
+    server_ptr->Run();
+
+    return 0;
 }

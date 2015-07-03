@@ -1,5 +1,6 @@
 #include <string>
 #include <iostream>
+#include "enet_client.h"
 
 int main(int argc, char* argv[])
 {
@@ -15,6 +16,16 @@ int main(int argc, char* argv[])
     {
         std::cerr << "Exception: " << e.what() << "\n";
     }
+
+    if (enet_initialize () != 0)
+    {
+        fprintf (stderr, "An error occurred while initializing ENet.\n");
+        return EXIT_FAILURE;
+    }
+    atexit (enet_deinitialize);
+
+    auto client_ptr = std::make_shared<EnetClient>(argv[1], std::atoi(argv[2]), std::atoi(argv[3]));
+    client_ptr->Run();
 
     return 0;
 }
