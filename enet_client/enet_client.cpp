@@ -79,8 +79,8 @@ EnetClient::EnetClient(const std::string& server_ip, int server_port, size_t tes
     ENetHost* client = enet_host_create (NULL /* create a client host */,
             1 /* only allow 1 outgoing connection */,
             2 /* allow up 2 channels to be used, 0 and 1 */,
-            57600 / 8 /* 56K modem with 56 Kbps downstream bandwidth */,
-            14400 / 8 /* 56K modem with 14 Kbps upstream bandwidth */);
+            57600 / 8 * 10 /* 56K modem with 56 Kbps downstream bandwidth */,
+            14400 / 8 * 10 /* 56K modem with 14 Kbps upstream bandwidth */);
     if (client == NULL)
     {
         fprintf (stderr, 
